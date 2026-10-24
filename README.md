@@ -17,3 +17,8 @@ anything missing, things to confirm with the shop, and go-live steps.
 - Optional: set `formEndpoint` (e.g. a free Formspree form) so booking requests arrive by email.
   Without it, customers send their request to the shop by Instagram DM or text in one tap.
 - Confirm the items listed under `confirm` in the SHOP block with the shop.
+
+## Dark / light theme
+The glass toggle (header on tablet/desktop, footer on phones) switches the whole page between
+the original design and an all-dark version. It starts from the visitor's system setting and
+remembers their choice. Theme colours are the `--t-*` variables at the top of the stylesheet.
