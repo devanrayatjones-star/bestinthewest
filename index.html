@@ -299,16 +299,49 @@ section{padding:76px 0}
 .inq .sub{margin:0 0 20px;color:var(--t-muted)}
 
 /* ---------- Footer ---------- */
-footer{background:var(--ink);color:var(--muted-ink);font-size:14px;padding:34px 0 calc(34px + env(safe-area-inset-bottom))}
+footer{background:var(--ink);color:var(--muted-ink);font-size:14px;padding:34px 0 calc(124px + env(safe-area-inset-bottom))}
 footer .wrap{display:flex;flex-wrap:wrap;gap:14px 24px;justify-content:space-between;align-items:center}
 footer a{color:var(--paper)}
 
 /* ---------- Mobile book bar ---------- */
-.mbar{position:fixed;left:0;right:0;bottom:0;z-index:45;padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom));background:rgba(13,13,14,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line-ink);display:flex;gap:10px;transform:translateY(110%);transition:transform .3s var(--ease)}
-.mbar.show{transform:none}
-.mbar .btn{flex:1}
-.mbar .btn--ghost{flex:0 0 auto;color:var(--paper)}
-@media (min-width:860px){.mbar{display:none}}
+/* ---------- Liquid orb dock ----------
+   Ported from the LiquidJellyNav component: dark jelly pill, WebGL liquid orb, glassy
+   pill buttons with a sweeping shine. Recoloured to the shop's red neon. Floats in once
+   the hero has scrolled away; icons only on phones. */
+.lnav{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));z-index:45;width:max-content;max-width:calc(100vw - 24px);transform:translate(-50%,calc(100% + 30px));opacity:0;visibility:hidden;transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .3s ease,visibility 0s linear .55s}
+.lnav.show{transform:translate(-50%,0);opacity:1;visibility:visible;transition-delay:0s}
+.lnav__bar{position:relative;display:flex;align-items:center;gap:14px;overflow:hidden;padding:9px 10px 9px 12px;border:1px solid rgba(255,255,255,.085);border-radius:999px;background:linear-gradient(180deg,rgba(25,26,27,.96),rgba(9,10,11,.985));box-shadow:0 24px 60px rgba(0,0,0,.55),0 10px 22px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.075),inset 0 -1px 0 rgba(0,0,0,.92),inset 20px 0 35px rgba(255,255,255,.012)}
+.lnav__bar::after{content:"";position:absolute;inset:1px;border-radius:inherit;background:linear-gradient(105deg,rgba(255,255,255,.025),transparent 22%,transparent 78%,rgba(255,255,255,.012));pointer-events:none}
+.lnav__orb-wrap{position:relative;z-index:2;flex:0 0 64px;width:64px;height:64px}
+.lnav__orb{position:relative;display:block;width:100%;height:100%;padding:0;margin:0;border:0;background:none;border-radius:50%;cursor:pointer;overflow:visible;filter:drop-shadow(0 0 5px rgba(255,86,92,.78)) drop-shadow(0 0 17px rgba(255,22,32,.46));-webkit-tap-highlight-color:transparent}
+.lnav__orb canvas{position:relative;z-index:2;display:block;width:100%!important;height:100%!important;border-radius:50%}
+.lnav__orb:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.lnav__orb-glow{position:absolute;z-index:0;inset:12%;border-radius:50%;background:#ff1f2a;opacity:.34;filter:blur(14px);animation:lnav-breathe 3.4s ease-in-out infinite}
+.lnav__fallback{position:absolute;z-index:1;inset:0;border:1px solid rgba(255,150,150,.7);border-radius:50%;background:radial-gradient(circle at 35% 28%,#ffd6d3,#ff2b33 22%,#8a0a10 57%,#120203 100%);box-shadow:0 0 22px rgba(255,30,40,.5)}
+.lnav__orb.is-3d .lnav__fallback{display:none}
+.lnav__rail{position:relative;z-index:2;display:flex;min-width:0;align-items:center;gap:8px}
+.lnav__item{position:relative;display:inline-flex;height:58px;align-items:center;justify-content:center;gap:10px;overflow:hidden;padding:0 20px;border:1px solid rgba(255,255,255,.047);border-radius:999px;outline:none;color:rgba(226,226,228,.68);text-decoration:none;background:linear-gradient(180deg,rgba(27,28,29,.53),rgba(15,16,17,.35));box-shadow:inset 0 1px 0 rgba(255,255,255,.024),0 10px 22px rgba(0,0,0,.18);transition:color 450ms cubic-bezier(.16,1,.3,1),border-color 450ms cubic-bezier(.16,1,.3,1),background 450ms cubic-bezier(.16,1,.3,1),transform 450ms cubic-bezier(.16,1,.3,1),box-shadow 450ms cubic-bezier(.16,1,.3,1);-webkit-tap-highlight-color:transparent}
+.lnav__item svg{z-index:1;flex:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:color 450ms cubic-bezier(.16,1,.3,1),filter 450ms cubic-bezier(.16,1,.3,1),transform 450ms cubic-bezier(.16,1,.3,1)}
+.lnav__item>span:last-child{z-index:1;font-size:16px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+.lnav__item-shine{position:absolute;top:-120%;left:-45%;width:42%;height:340%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.075),transparent);opacity:0;pointer-events:none;transform:rotate(16deg);transition:left 720ms cubic-bezier(.16,1,.3,1),opacity 250ms ease}
+.lnav__item:hover{border-color:rgba(255,255,255,.09);color:rgba(250,250,251,.92);background:linear-gradient(180deg,rgba(33,34,36,.7),rgba(17,18,20,.58));box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 30px rgba(0,0,0,.25);transform:translateY(-2px)}
+.lnav__item:hover .lnav__item-shine{left:108%;opacity:1}
+.lnav__item:hover svg{transform:scale(1.04)}
+.lnav__item.is-active{border-color:rgba(255,255,255,.068);color:rgba(245,245,246,.84);background:radial-gradient(circle at 50% -55%,rgba(255,255,255,.075),transparent 68%),linear-gradient(180deg,rgba(31,32,34,.66),rgba(15,16,17,.54))}
+.lnav__item.is-active svg{color:rgba(240,242,246,.87);filter:drop-shadow(0 0 8px rgba(255,190,190,.1))}
+.lnav__item--book,.lnav__item--book.is-active{color:var(--accent-on-ink)}
+.lnav__item--book:hover{color:#ff7a80}
+.lnav__item:focus-visible{border-color:rgba(255,77,83,.65);box-shadow:0 0 0 4px rgba(255,43,51,.2)}
+@keyframes lnav-breathe{0%,100%{opacity:.26;transform:scale(.9)}50%{opacity:.48;transform:scale(1.08)}}
+@media (max-width:720px){
+  .lnav{width:calc(100vw - 24px)}
+  .lnav__bar{gap:clamp(8px,3vw,14px);padding:8px clamp(8px,3vw,12px)}
+  .lnav__orb-wrap{flex-basis:56px;width:56px;height:56px}
+  .lnav__rail{flex:1;gap:clamp(4px,1.6vw,8px)}
+  .lnav__item{flex:1 1 0;min-width:0;height:52px;gap:0;padding:0}
+  .lnav__item svg{width:24px;height:24px}
+  .lnav__item>span:last-child{display:none}
+}
 
 /* ---------- Thank-you page ---------- */
 .thanks{min-height:calc(100svh - 73px);background:var(--ink);color:var(--paper);display:flex;align-items:center;position:relative;overflow:hidden}
@@ -324,7 +357,7 @@ footer a{color:var(--paper)}
 [hidden]{display:none!important}
 
 /* ---------- Toast ---------- */
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--paper);color:var(--ink);padding:12px 18px;border-radius:var(--r);font-size:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:opacity .25s,transform .25s var(--ease);pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(112px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--paper);color:var(--ink);padding:12px 18px;border-radius:var(--r);font-size:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:opacity .25s,transform .25s var(--ease);pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---------- Check report (?check) ---------- */
@@ -405,6 +438,7 @@ footer .gt-wrap{margin-left:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
   .js .reveal{opacity:1;transform:none}
   .marquee .track{animation:none}
+  .lnav__orb-glow{animation:none}
 }
 </style>
 </head>
@@ -704,10 +738,22 @@ window.SHOP = {
   </button>
 </template>
 
-<div class="mbar" id="mbar">
-  <a class="btn btn--ghost" href="#services">Prices</a>
-  <a class="btn" href="#book" data-cta>Book now</a>
-</div>
+<nav class="lnav" id="lnav" aria-label="Quick navigation">
+  <div class="lnav__bar">
+    <div class="lnav__orb-wrap">
+      <button type="button" class="lnav__orb" id="lnav-orb" aria-label="Book now" title="Book now">
+        <span class="lnav__orb-glow" aria-hidden="true"></span>
+        <span class="lnav__fallback" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="lnav__rail">
+      <a class="lnav__item" href="#top" aria-label="Home"><span class="lnav__item-shine" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Home</span></a>
+      <a class="lnav__item" href="#services" aria-label="Prices"><span class="lnav__item-shine" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg><span>Prices</span></a>
+      <a class="lnav__item lnav__item--book" href="#book" aria-label="Book"><span class="lnav__item-shine" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg><span>Book</span></a>
+      <a class="lnav__item" href="#contact" aria-label="Contact"><span class="lnav__item-shine" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><span>Contact</span></a>
+    </div>
+  </div>
+</nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- Embedded photos (WebP, cropped from the shop's Instagram posts) -->
@@ -1191,7 +1237,8 @@ function route(){
   if (location.hash === "#thank-you" && !lastSent) history.replaceState(null, "", location.pathname + location.search);
   $("#home").hidden = !!onThanks; $("#thanks").hidden = !onThanks;
   document.title = onThanks ? "Thank you · " + S.name : homeTitle;
-  if (onThanks){ window.scrollTo(0,0); $("#t-h").focus({preventScroll:true}); $("#mbar").classList.remove("show"); }
+  if (onThanks){ window.scrollTo(0,0); $("#t-h").focus({preventScroll:true}); }
+  if (window.__dockUpdate) window.__dockUpdate();
   else if (lastSent && lastSent.kind === "booking"){ bk = { step:1, tab:0, b:null, s:null, date:null, time:null }; renderBooking(); lastSent = null; }
 }
 window.addEventListener("popstate", route);
@@ -1257,16 +1304,314 @@ window.addEventListener("popstate", route);
   setDk(dk, false);
 })();
 
-/* ---------------- mobile book bar + reveal ---------------- */
+/* ---------------- scroll reveal ---------------- */
 if ("IntersectionObserver" in window){
-  var heroIn = true, bookIn = false, contactIn = false, bar = $("#mbar");
-  var upd = function(){ bar.classList.toggle("show", !heroIn && !bookIn && !contactIn && $("#thanks").hidden); };
-  new IntersectionObserver(function(es){ heroIn = es[0].isIntersecting; upd(); }, { threshold: 0.05 }).observe($("#top"));
-  var io2 = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.target.id === "book") bookIn = e.isIntersecting; if (e.target.id === "contact") contactIn = e.isIntersecting; }); upd(); }, { threshold: 0.15 });
-  io2.observe($("#book")); io2.observe($("#contact"));
   var rio = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); rio.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px" });
   $$(".reveal").forEach(function(el){ rio.observe(el); });
 } else $$(".reveal").forEach(function(el){ el.classList.add("in"); });
+
+/* ---------------- liquid orb dock ----------------
+   Ported from the LiquidJellyNav React/three-fiber component to plain three.js, which is
+   only downloaded the first time the dock appears. Same shaders, ribbons, particles and
+   motion, recoloured from electric blue to the shop's red neon. The Bloom post-pass is
+   replaced by CSS glow (drop-shadows + breathing glow) so the canvas stays transparent and
+   no extra libraries load. The orb is the "Book now" button. */
+(function liquidDock(){
+  var dock = $("#lnav"); if (!dock) return;
+  var THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js";
+  var items = $$(".lnav__item", dock), orbBtn = $("#lnav-orb");
+  var targets = items.map(function(a){ return document.getElementById(a.getAttribute("href").slice(1)); });
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var heroIn = true, typing = false, shown = false, orb = null, loading = false;
+
+  // Highlight the section in view (the original's active item, driven by scroll)
+  function spy(){
+    var mid = innerHeight * 0.45, active = 0;
+    targets.forEach(function(t, i){ if (t && t.getBoundingClientRect().top <= mid) active = i; });
+    items.forEach(function(a, i){ a.classList.toggle("is-active", i === active); if (i === active) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+  }
+  var ticking = false;
+  window.addEventListener("scroll", function(){ if (!ticking && shown){ ticking = true; requestAnimationFrame(function(){ ticking = false; spy(); }); } }, { passive: true });
+
+  // Show once the hero is gone; hide on the thank-you page and while someone is typing
+  function update(){
+    var show = !heroIn && !typing && $("#thanks").hidden;
+    if (show === shown) return;
+    shown = show; dock.classList.toggle("show", show);
+    if (show){ spy(); loadOrb(); }
+    if (orb){ if (show) orb.start(); else orb.stop(); }
+  }
+  window.__dockUpdate = update;
+  if ("IntersectionObserver" in window) new IntersectionObserver(function(es){ heroIn = es[0].isIntersecting; update(); }, { threshold: 0.05 }).observe($("#top"));
+  else { heroIn = false; update(); }
+  var isField = function(el){ return el && el.matches && el.matches("input, textarea, select"); };
+  document.addEventListener("focusin", function(e){ if (isField(e.target)){ typing = true; update(); } });
+  document.addEventListener("focusout", function(e){ if (isField(e.target)){ typing = false; setTimeout(update, 60); } });
+  document.addEventListener("visibilitychange", function(){ if (!orb) return; if (document.hidden) orb.stop(); else if (shown) orb.start(); });
+
+  orbBtn.addEventListener("click", function(){
+    if (orb) orb.burst();
+    var b = $("#book"); if (b) b.scrollIntoView();
+  });
+
+  function webglOk(){ try { var c = document.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl"))); } catch(e){ return false; } }
+  function loadOrb(){
+    if (loading) return; loading = true;
+    if (!webglOk()) return; // the CSS orb stays
+    var importer; try { importer = new Function("u", "return import(u)"); } catch(e){ return; } // keeps old browsers from a syntax error
+    importer(THREE_URL).then(function(THREE){
+      orb = createOrb(THREE, orbBtn);
+      orbBtn.classList.add("is-3d");
+      if (shown) orb.start();
+    }).catch(function(){ /* offline or blocked: the CSS orb stays */ });
+  }
+
+  var NOISE = [
+    "vec4 permute(vec4 x){ return mod(((x * 34.0) + 1.0) * x, 289.0); }",
+    "vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }",
+    "float snoise(vec3 v){",
+    "  const vec2 C = vec2(1.0 / 6.0, 1.0 / 3.0);",
+    "  const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);",
+    "  vec3 i = floor(v + dot(v, C.yyy));",
+    "  vec3 x0 = v - i + dot(i, C.xxx);",
+    "  vec3 g = step(x0.yzx, x0.xyz);",
+    "  vec3 l = 1.0 - g;",
+    "  vec3 i1 = min(g.xyz, l.zxy);",
+    "  vec3 i2 = max(g.xyz, l.zxy);",
+    "  vec3 x1 = x0 - i1 + C.xxx;",
+    "  vec3 x2 = x0 - i2 + C.yyy;",
+    "  vec3 x3 = x0 - D.yyy;",
+    "  i = mod(i, 289.0);",
+    "  vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));",
+    "  float n_ = 1.0 / 7.0;",
+    "  vec3 ns = n_ * D.wyz - D.xzx;",
+    "  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);",
+    "  vec4 x_ = floor(j * ns.z);",
+    "  vec4 y_ = floor(j - 7.0 * x_);",
+    "  vec4 x = x_ * ns.x + ns.yyyy;",
+    "  vec4 y = y_ * ns.x + ns.yyyy;",
+    "  vec4 h = 1.0 - abs(x) - abs(y);",
+    "  vec4 b0 = vec4(x.xy, y.xy);",
+    "  vec4 b1 = vec4(x.zw, y.zw);",
+    "  vec4 s0 = floor(b0) * 2.0 + 1.0;",
+    "  vec4 s1 = floor(b1) * 2.0 + 1.0;",
+    "  vec4 sh = -step(h, vec4(0.0));",
+    "  vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;",
+    "  vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;",
+    "  vec3 p0 = vec3(a0.xy, h.x);",
+    "  vec3 p1 = vec3(a0.zw, h.y);",
+    "  vec3 p2 = vec3(a1.xy, h.z);",
+    "  vec3 p3 = vec3(a1.zw, h.w);",
+    "  vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));",
+    "  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;",
+    "  vec4 m = max(0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), 0.0);",
+    "  m *= m;",
+    "  return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));",
+    "}",
+    "float fbm(vec3 p){",
+    "  float value = 0.0;",
+    "  float amplitude = 0.55;",
+    "  mat3 rotation = mat3(0.00, 0.80, 0.60, -0.80, 0.36, -0.48, -0.60, -0.48, 0.64);",
+    "  for (int i = 0; i < 4; i++){",
+    "    value += amplitude * snoise(p);",
+    "    p = rotation * p * 2.02 + vec3(0.17, -0.11, 0.13);",
+    "    amplitude *= 0.5;",
+    "  }",
+    "  return value;",
+    "}"
+  ].join("\n");
+
+  var VERTEX = [
+    "uniform float uTime;",
+    "uniform float uEnergy;",
+    "varying vec3 vObjectPosition;",
+    "varying vec3 vWorldPosition;",
+    "varying vec3 vWorldNormal;",
+    "varying float vNoise;",
+    NOISE,
+    "void main(){",
+    "  vec3 p = position;",
+    "  float time = uTime * 0.42;",
+    "  vec3 samplePoint = normalize(position) * 2.35;",
+    "  float broadNoise = snoise(samplePoint + vec3(time, -time * 0.71, time * 0.46));",
+    "  float detailNoise = snoise(samplePoint * 2.1 + vec3(-time * 0.82, time * 0.55, -time * 0.34));",
+    "  float liquidNoise = broadNoise + detailNoise * 0.42;",
+    "  float ripple = sin(position.y * 5.4 - uTime * 1.65 + liquidNoise * 2.8);",
+    "  float displacement = liquidNoise * 0.034 + ripple * 0.011;",
+    "  p += normal * displacement * (1.0 + uEnergy * 0.78);",
+    "  vec4 world = modelMatrix * vec4(p, 1.0);",
+    "  vObjectPosition = p;",
+    "  vWorldPosition = world.xyz;",
+    "  vWorldNormal = normalize(mat3(modelMatrix) * normal);",
+    "  vNoise = liquidNoise;",
+    "  gl_Position = projectionMatrix * viewMatrix * world;",
+    "}"
+  ].join("\n");
+
+  var LIQUID = [
+    "uniform float uTime;",
+    "uniform float uEnergy;",
+    "uniform vec2 uPointer;",
+    "varying vec3 vObjectPosition;",
+    "varying vec3 vWorldPosition;",
+    "varying vec3 vWorldNormal;",
+    "varying float vNoise;",
+    NOISE,
+    "mat2 rotate2d(float angle){ float s = sin(angle); float c = cos(angle); return mat2(c, -s, s, c); }",
+    "void main(){",
+    "  vec3 p = vObjectPosition * 2.3;",
+    "  p.xz *= rotate2d(uTime * 0.12);",
+    "  p.xy *= rotate2d(-uTime * 0.08);",
+    "  vec3 drift = vec3(uTime * 0.13, -uTime * 0.18, uTime * 0.105);",
+    "  float warpA = fbm(p * 1.08 + drift);",
+    "  float warpB = fbm(p * 1.72 - drift * 1.37 + vec3(warpA * 1.4));",
+    "  float flow = fbm(p * 2.35 + vec3(warpA, warpB, -warpA) * 1.75 + drift * 0.8);",
+    "  float angle = atan(p.z, p.x);",
+    "  float ribbonWave = sin(p.y * 5.0 + angle * 2.25 + warpA * 4.2 - uTime * 1.35);",
+    "  float ribbons = pow(max(0.0, 1.0 - abs(ribbonWave)), 4.5);",
+    "  float cells = smoothstep(0.08, 0.72, flow + warpB * 0.46);",
+    "  float sparks = pow(max(0.0, flow * 0.5 + warpA * 0.5 + 0.44), 6.0);",
+    "  vec3 normal = normalize(vWorldNormal);",
+    "  vec3 viewDirection = normalize(cameraPosition - vWorldPosition);",
+    "  float facing = clamp(dot(normal, viewDirection), 0.0, 1.0);",
+    "  float fresnel = pow(1.0 - facing, 2.75);",
+    // shop palette: deep crimson -> neon red -> hot coral -> warm white
+    "  vec3 deepRed = vec3(0.10, 0.004, 0.012);",
+    "  vec3 neonRed = vec3(1.0, 0.06, 0.09);",
+    "  vec3 hotCoral = vec3(1.0, 0.42, 0.34);",
+    "  vec3 warmWhite = vec3(1.0, 0.90, 0.88);",
+    "  vec3 color = mix(deepRed, neonRed, cells);",
+    "  color = mix(color, hotCoral, ribbons * 0.66);",
+    "  color += neonRed * max(vNoise, 0.0) * 0.42;",
+    "  color += warmWhite * sparks * (0.6 + uEnergy * 0.65);",
+    "  color += mix(neonRed, hotCoral, facing) * fresnel * 0.82;",
+    "  float pointerGlow = max(0.0, dot(normalize(vObjectPosition), normalize(vec3(uPointer, 0.72))));",
+    "  pointerGlow = pow(pointerGlow, 10.0);",
+    "  color += warmWhite * pointerGlow * (0.16 + uEnergy * 0.36);",
+    "  color *= 0.86 + facing * 0.28;",
+    "  gl_FragColor = vec4(color, 0.98);",
+    "}"
+  ].join("\n");
+
+  var GLASS = [
+    "uniform float uTime;",
+    "uniform float uEnergy;",
+    "varying vec3 vObjectPosition;",
+    "varying vec3 vWorldPosition;",
+    "varying vec3 vWorldNormal;",
+    "varying float vNoise;",
+    "void main(){",
+    "  vec3 normal = normalize(vWorldNormal);",
+    "  vec3 viewDirection = normalize(cameraPosition - vWorldPosition);",
+    "  vec3 lightDirection = normalize(vec3(-0.55, 0.82, 0.95));",
+    "  vec3 reflectedLight = reflect(-lightDirection, normal);",
+    "  float facing = clamp(dot(normal, viewDirection), 0.0, 1.0);",
+    "  float fresnel = pow(1.0 - facing, 3.15);",
+    "  float sharpHighlight = pow(max(dot(reflectedLight, viewDirection), 0.0), 86.0);",
+    "  float broadHighlight = pow(max(dot(reflectedLight, viewDirection), 0.0), 13.0);",
+    "  float lowerRim = pow(max(dot(normal, normalize(vec3(0.35, -0.75, 0.52))), 0.0), 8.0);",
+    "  vec3 red = vec3(1.0, 0.16, 0.18);",
+    "  vec3 coral = vec3(1.0, 0.50, 0.42);",
+    "  vec3 white = vec3(1.0, 0.95, 0.93);",
+    "  vec3 color = red * fresnel * 1.18;",
+    "  color += coral * broadHighlight * 0.36;",
+    "  color += white * sharpHighlight * (1.4 + uEnergy * 0.55);",
+    "  color += red * lowerRim * 0.28;",
+    "  color += coral * max(vNoise, 0.0) * fresnel * 0.16;",
+    "  float alpha = 0.035 + fresnel * 0.47;",
+    "  alpha += broadHighlight * 0.10 + sharpHighlight * 0.74;",
+    "  alpha += lowerRim * 0.08;",
+    "  gl_FragColor = vec4(color, clamp(alpha, 0.0, 0.92));",
+    "}"
+  ].join("\n");
+
+  function createOrb(THREE, host){
+    var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.12;
+    renderer.setClearColor(0x000000, 0);
+    host.appendChild(renderer.domElement);
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(34, 1, 0.1, 20);
+    camera.position.set(0, 0, 4.15);
+    function fit(){ var s = host.clientWidth || 64; renderer.setSize(s, s, false); }
+    fit(); window.addEventListener("resize", fit);
+
+    var add = THREE.AdditiveBlending;
+    var group = new THREE.Group(); scene.add(group);
+    var fluidU = { uTime: { value: 0 }, uEnergy: { value: 0 }, uPointer: { value: new THREE.Vector2(0, 0) } };
+    var glassU = { uTime: { value: 0 }, uEnergy: { value: 0 } };
+
+    var fluid = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 96), new THREE.ShaderMaterial({ uniforms: fluidU, vertexShader: VERTEX, fragmentShader: LIQUID, transparent: true, depthWrite: true }));
+    fluid.scale.setScalar(0.955); fluid.renderOrder = 1; group.add(fluid);
+
+    // energy ribbons
+    var ribbons = new THREE.Group(); ribbons.scale.setScalar(0.93); group.add(ribbons);
+    function knot(a, color, opacity, rot, scale){
+      var m = new THREE.Mesh(new THREE.TorusKnotGeometry(a[0], a[1], a[2], a[3], a[4], a[5]),
+        new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: opacity, depthWrite: false, blending: add, toneMapped: false }));
+      m.rotation.set(rot[0], rot[1], rot[2]); if (scale) m.scale.setScalar(scale); ribbons.add(m);
+    }
+    knot([0.57, 0.012, 180, 7, 2, 3], "#ff4a52", 0.34, [0.7, 0.25, 0.15]);
+    knot([0.56, 0.009, 160, 6, 3, 4], "#ffd0cc", 0.24, [-0.42, 0.78, -0.4], 0.82);
+
+    // internal particles (same seeded layout as the original)
+    var count = 92, pos = new Float32Array(count * 3);
+    var rnd = function(i){ var v = Math.sin(i * 78.233 + 19.19) * 43758.5453; return v - Math.floor(v); };
+    for (var i = 0; i < count; i++){
+      var r = Math.cbrt(rnd(i * 3 + 1)) * 0.84, th = rnd(i * 3 + 2) * Math.PI * 2, z = rnd(i * 3 + 3) * 2 - 1, ring = Math.sqrt(1 - z * z);
+      pos[i * 3] = r * ring * Math.cos(th); pos[i * 3 + 1] = r * z; pos[i * 3 + 2] = r * ring * Math.sin(th);
+    }
+    var pg = new THREE.BufferGeometry(); pg.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    var pm = new THREE.PointsMaterial({ color: "#ffb3ae", size: 0.025, sizeAttenuation: true, transparent: true, opacity: 0.7, depthWrite: false, blending: add, toneMapped: false });
+    var points = new THREE.Points(pg, pm); points.renderOrder = 4; group.add(points);
+
+    var glass = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 96), new THREE.ShaderMaterial({ uniforms: glassU, vertexShader: VERTEX, fragmentShader: GLASS, transparent: true, depthWrite: false, blending: add, side: THREE.DoubleSide }));
+    glass.scale.setScalar(1.035); glass.renderOrder = 5; group.add(glass);
+    var halo = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), new THREE.MeshBasicMaterial({ color: "#ff6a70", transparent: true, opacity: 0.055, depthWrite: false, blending: add, side: THREE.BackSide, toneMapped: false }));
+    halo.scale.setScalar(1.062); halo.renderOrder = 6; group.add(halo);
+
+    // pointer = cursor position relative to the orb, across the whole window
+    var pointer = new THREE.Vector2(), hovered = false, burst = 0;
+    var clamp1 = function(v){ return v < -1 ? -1 : v > 1 ? 1 : v; };
+    window.addEventListener("pointermove", function(e){
+      var b = host.getBoundingClientRect();
+      pointer.set(clamp1((e.clientX - (b.left + b.width / 2)) / (innerWidth / 2)), clamp1(-(e.clientY - (b.top + b.height / 2)) / (innerHeight / 2)));
+    }, { passive: true });
+    host.addEventListener("pointerenter", function(){ hovered = true; });
+    host.addEventListener("pointerleave", function(){ hovered = false; });
+
+    var damp = THREE.MathUtils.damp, raf = 0, running = false, last = 0, t0 = performance.now();
+    function frame(now){
+      var dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000)); last = now;
+      var t = (now - t0) / 1000;
+      burst = Math.max(0, burst - dt * 1.55);
+      var energy = Math.min(1.25, (hovered ? 0.62 : 0.14) + burst);
+      fluidU.uTime.value = t; glassU.uTime.value = t;
+      fluidU.uEnergy.value = damp(fluidU.uEnergy.value, energy, 5.2, dt);
+      glassU.uEnergy.value = damp(glassU.uEnergy.value, energy, 5.2, dt);
+      fluidU.uPointer.value.lerp(pointer, 0.065);
+      group.scale.setScalar(damp(group.scale.x, hovered ? 1.055 : 1, 6.5, dt));
+      group.rotation.y = damp(group.rotation.y, pointer.x * 0.22 + t * 0.055, 3.2, dt);
+      group.rotation.x = damp(group.rotation.x, -pointer.y * 0.17 + Math.sin(t * 0.5) * 0.04, 3.2, dt);
+      ribbons.rotation.x += dt * 0.075; ribbons.rotation.y -= dt * 0.105; ribbons.rotation.z = Math.sin(t * 0.31) * 0.22;
+      points.rotation.y += dt * 0.16; points.rotation.x = Math.sin(t * 0.22) * 0.24;
+      pm.opacity = 0.58 + Math.sin(t * 2.2) * 0.13;
+      renderer.render(scene, camera);
+      if (running) raf = requestAnimationFrame(frame);
+    }
+    return {
+      start: function(){
+        if (reduce){ frame(t0 + 3000); return; } // reduced motion: one still frame
+        if (running || document.hidden) return;
+        running = true; last = performance.now(); raf = requestAnimationFrame(frame);
+      },
+      stop: function(){ running = false; cancelAnimationFrame(raf); },
+      burst: function(){ burst = 1.05; }
+    };
+  }
+})();
 
 /* ---------------- hero particles: drifting hair clippings ---------------- */
 (function clips(){

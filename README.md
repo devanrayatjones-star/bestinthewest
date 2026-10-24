@@ -22,3 +22,9 @@ anything missing, things to confirm with the shop, and go-live steps.
 The glass toggle (header on tablet/desktop, footer on phones) switches the whole page between
 the original design and an all-dark version. It starts from the visitor's system setting and
 remembers their choice. Theme colours are the `--t-*` variables at the top of the stylesheet.
+
+## Floating navigation
+After the hero scrolls away, a floating bar slides in at the bottom with a live WebGL
+liquid orb (tap it to book) and Home / Prices / Book / Contact links that highlight the section
+in view. three.js loads from jsDelivr only when the bar first appears; if it can't load, a
+CSS orb is shown instead. The bar hides while someone is typing in a form.
